@@ -164,6 +164,8 @@ function App() {
           date,
           tableData,
           currentCareerFinishingTime,
+          previousDays: cumulativeNet,
+          numberOfPreviousDays,
         } as StoredData),
       );
     }
@@ -180,7 +182,7 @@ function App() {
     );
     setModalAction(() => () => {
       let { previousDays, numberOfPreviousDays }: StoredData = JSON.parse(
-        window.localStorage.get('storedData'),
+        window.localStorage.getItem('storedData') ?? '{}',
       );
 
       previousDays ??= 0;
@@ -193,10 +195,15 @@ function App() {
       setCurrentCareerTimeLeft(null);
       setTableData([]);
 
-      window.localStorage.set('storedData', {
-        previousDays,
-        numberOfPreviousDays,
-      } as StoredData);
+      window.localStorage.setItem(
+        'storedData',
+        JSON.stringify({
+          previousDays,
+          numberOfPreviousDays,
+        } as StoredData),
+      );
+
+      setOpenModal(false);
     });
     setOpenModal(true);
   };
