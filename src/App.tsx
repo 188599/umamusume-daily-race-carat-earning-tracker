@@ -255,6 +255,7 @@ function App() {
                     onClick={() =>
                       handleChangeGainedCaratsTableDataItem(i, 'add')
                     }
+                    disabled={net === 100}
                   >
                     ➕
                   </button>
