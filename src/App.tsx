@@ -279,7 +279,10 @@ function App() {
             </tr>
             <tr>
               <th className="border p-1">{caratsUsed}</th>
-              <th className="border p-1">{caratsGained}</th>
+              <th className="border p-1">
+                {caratsGained}
+                {caratsGained >= 100 ? ' (max)' : null}
+              </th>
               <th className="border p-1"></th>
             </tr>
           </tbody>
@@ -299,7 +302,6 @@ function App() {
             >
               {net > 0 ? '+' : null}
               {net}
-              {caratsGained >= 100 ? ' (max)' : null}
             </span>
           </h2>
           {cumulativeNet != null ?
