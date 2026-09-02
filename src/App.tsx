@@ -307,14 +307,14 @@ function App() {
               <span
                 className={`
             ${
-              cumulativeNet > 0 ? 'text-green-400'
-              : cumulativeNet == 0 ? 'text-blue-400'
+              cumulativeNet + net > 0 ? 'text-green-400'
+              : cumulativeNet + net == 0 ? 'text-blue-400'
               : 'text-red-400'
             } px-4
             `}
               >
-                {cumulativeNet > 0 ? '+' : null}
-                {cumulativeNet}
+                {cumulativeNet + net > 0 ? '+' : null}
+                {cumulativeNet + net}
               </span>
             </h2>
           : null}
