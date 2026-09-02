@@ -64,9 +64,6 @@ function App() {
 
   const handleTableDataDeleteItem = (index: number) => {
     if (index == tableData.length - 1) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
       setCurrentCareerFinishingTime(null);
       setCurrentCareerTimeLeft(null);
     }
@@ -96,6 +93,11 @@ function App() {
     index: number,
     operation: 'add' | 'subtract',
   ) => {
+    if (index == tableData.length - 1 && intervalRef.current) {
+      setCurrentCareerFinishingTime(null);
+      setCurrentCareerTimeLeft(null);
+    }
+
     setTableData((tableData) => {
       const newTableData = [...tableData];
       const currentItemValue = { ...newTableData[index] };
@@ -133,6 +135,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
     if (currentCareerFinishingTime != null) {
       intervalRef.current = setInterval(() => {
         const now = dayjs();
