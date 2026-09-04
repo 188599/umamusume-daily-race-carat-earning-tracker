@@ -111,7 +111,7 @@ export const CaratsUsedAndGainedTable = ({
 
   return (
     <>
-      <table className="outline outline-collapse">
+      <table className="outline">
         <thead>
           <tr>
             <th className="outline p-1">Carats used?</th>
@@ -122,7 +122,7 @@ export const CaratsUsedAndGainedTable = ({
         <tbody>
           {tableData.map((data, i) => (
             <tr key={i}>
-              <th className="outline p-2">
+              <th className="outline p-2 justify-items-center">
                 <Button
                   size="xs"
                   outline
@@ -137,7 +137,7 @@ export const CaratsUsedAndGainedTable = ({
                   : <XMarkIcon className="h-4 w-4" />}
                 </Button>
               </th>
-              <th className="outline p-2 flex gap-2">
+              <th className="outline p-2 justify-items-center flex gap-2">
                 <Button
                   pill
                   color="blue"
@@ -163,7 +163,7 @@ export const CaratsUsedAndGainedTable = ({
                   <PlusIcon className="h-4 w-4" />
                 </Button>
               </th>
-              <th className="outline p-2">
+              <th className="outline p-2 justify-items-center">
                 <Button
                   pill
                   outline
