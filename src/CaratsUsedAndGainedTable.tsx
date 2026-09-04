@@ -1,6 +1,14 @@
+import {
+  CheckIcon,
+  MinusIcon,
+  PlusIcon,
+  TrashIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import type { Dayjs } from 'dayjs';
-import ModalConfirmAction from './ModalConfirmAction';
+import { Button } from 'flowbite-react';
 import { useState } from 'react';
+import ModalConfirmAction from './ModalConfirmAction';
 
 interface TabledData {
   usedCarats: boolean;
@@ -103,71 +111,85 @@ export const CaratsUsedAndGainedTable = ({
 
   return (
     <>
-      <table className="border border-collapse">
+      <table className="outline outline-collapse">
         <thead>
           <tr>
-            <th className="border p-1">Carats used?</th>
-            <th className="border p-1">Carats gained</th>
-            <th className="border p-1"></th>
+            <th className="outline p-1">Carats used?</th>
+            <th className="outline p-1">Carats gained</th>
+            <th className="outline p-1"></th>
           </tr>
         </thead>
         <tbody>
           {tableData.map((data, i) => (
             <tr key={i}>
-              <th className="border p-2">
-                <button
-                  className="cursor-pointer transition-transform active:scale-95 duration-150 px-2"
+              <th className="outline p-2">
+                <Button
+                  size="xs"
+                  outline
+                  pill
+                  color={data.usedCarats ? 'green' : 'red'}
                   onClick={() =>
                     handleChangeUsedCaratsTableDataItem(i, !data.usedCarats)
                   }
                 >
-                  {data.usedCarats ? '✅' : '❎'}
-                </button>
+                  {data.usedCarats ?
+                    <CheckIcon className="h-4 w-4" />
+                  : <XMarkIcon className="h-4 w-4" />}
+                </Button>
               </th>
-              <th className="border p-2 flex">
-                <button
-                  className="cursor-pointer transition-transform active:scale-95 duration-150 px-2"
+              <th className="outline p-2 flex gap-2">
+                <Button
+                  pill
+                  color="blue"
+                  size="xs"
+                  outline
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'subtract')
                   }
                 >
-                  ➖
-                </button>
+                  <MinusIcon className="h-4 w-4" />
+                </Button>
                 <span className="flex-1">{data.gainedCarats ?? '-'}</span>
-                <button
-                  className="cursor-pointer transition-transform active:scale-95 duration-150 px-2"
+                <Button
+                  size="xs"
+                  pill
+                  color="blue"
+                  outline
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'add')
                   }
                   disabled={net === 100}
                 >
-                  ➕
-                </button>
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
               </th>
-              <th className="border p-2">
-                <button
-                  className="cursor-pointer transition-transform active:scale-95 duration-150"
+              <th className="outline p-2">
+                <Button
+                  pill
+                  outline
+                  size="xs"
+                  color="red"
                   onClick={() => handleDelete(i)}
                 >
-                  🗑️
-                </button>
+                  <TrashIcon className="h-4 w-4" />
+                </Button>
               </th>
             </tr>
           ))}
-          <tr className="border-collapse">
-            <th className="p-1">Total</th>
-            <th className="p-1"></th>
-            <th className="p-1 border"></th>
+          <tr>
+            <th className="outline p-1" colSpan={3}>
+              Total
+            </th>
             <th></th>
             <th></th>
           </tr>
           <tr>
-            <th className="border p-1">{caratsUsed}</th>
-            <th className="border p-1">
+            <th className="outline p-1">{caratsUsed}</th>
+            <th className="outline p-1">
               {caratsGained}
               {caratsGained >= 100 ? ' (max)' : null}
             </th>
-            <th className="border p-1"></th>
+            <th className="outline p-1"></th>
           </tr>
         </tbody>
       </table>

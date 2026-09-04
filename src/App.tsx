@@ -179,11 +179,11 @@ function App() {
       </div>
 
       <div className="flex gap-3 my-4">
-        <Button color="green" onClick={handleTableDataAddItem}>
+        <Button outline pill color="green" onClick={handleTableDataAddItem}>
           New Entry
         </Button>
 
-        <Button color="yellow" onClick={handleNewDay}>
+        <Button outline pill color="yellow" onClick={handleNewDay}>
           New Day
         </Button>
       </div>
