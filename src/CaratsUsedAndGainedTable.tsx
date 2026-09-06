@@ -130,6 +130,7 @@ export const CaratsUsedAndGainedTable = ({
                   size="xs"
                   outline
                   pill
+                  title='Toggle carats used'
                   color={data.usedCarats ? 'green' : 'red'}
                   onClick={() =>
                     handleChangeUsedCaratsTableDataItem(i, !data.usedCarats)
@@ -146,6 +147,7 @@ export const CaratsUsedAndGainedTable = ({
                   color="blue"
                   size="xs"
                   outline
+                  title='Decrease carats gained'
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'subtract')
                   }
@@ -158,6 +160,7 @@ export const CaratsUsedAndGainedTable = ({
                   pill
                   color="blue"
                   outline
+                  title='Add carats gained'
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'add')
                   }
@@ -172,6 +175,7 @@ export const CaratsUsedAndGainedTable = ({
                   outline
                   size="xs"
                   color="red"
+                  title='Delete entry'
                   onClick={() => handleDelete(i)}
                 >
                   <TrashIcon className="h-4 w-4" />
