@@ -39,8 +39,6 @@ export const CaratsUsedAndGainedTable = ({
     .map((d) => d.gainedCarats!)
     .reduce((acc, cur) => acc + cur, 0);
 
-  const net = caratsGained - caratsUsed;
-
   const handleTableDataDeleteItem = (index: number) => {
     if (index == tableData.length - 1) {
       setCurrentCareerFinishingTime(null);
@@ -158,7 +156,7 @@ export const CaratsUsedAndGainedTable = ({
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'add')
                   }
-                  disabled={net === 100}
+                  disabled={caratsGained >= 100}
                 >
                   <PlusIcon className="h-4 w-4" />
                 </Button>
