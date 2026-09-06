@@ -20,6 +20,7 @@ export const CaratsUsedAndGainedTable = ({
   setTableData,
   setCurrentCareerFinishingTime,
   setCurrentCareerTimeLeft,
+  doubleRaceRewards,
   intervalRef,
 }: {
   tableData: TabledData[];
@@ -28,10 +29,14 @@ export const CaratsUsedAndGainedTable = ({
     React.SetStateAction<Dayjs | null>
   >;
   setCurrentCareerTimeLeft: React.Dispatch<React.SetStateAction<number | null>>;
+  doubleRaceRewards: boolean;
   intervalRef: React.RefObject<number | null>;
 }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteModalAction, setDeleteModalAction] = useState(() => () => {});
+
+  const caratsPerReward = doubleRaceRewards ? 10 : 5;
+  const maxCaratsGained = doubleRaceRewards ? 200 : 100;
 
   const caratsUsed = tableData.filter((d) => d.usedCarats).length * 10;
   const caratsGained = tableData
@@ -81,13 +86,13 @@ export const CaratsUsedAndGainedTable = ({
       currentItemValue.gainedCarats ??= 0;
 
       if (operation == 'add') {
-        currentItemValue.gainedCarats += 5;
+        currentItemValue.gainedCarats += caratsPerReward;
         currentItemValue.gainedCarats = Math.min(
-          100,
+          maxCaratsGained,
           currentItemValue.gainedCarats,
         );
       } else {
-        currentItemValue.gainedCarats -= 5;
+        currentItemValue.gainedCarats -= caratsPerReward;
         currentItemValue.gainedCarats = Math.max(
           0,
           currentItemValue.gainedCarats,
@@ -156,7 +161,7 @@ export const CaratsUsedAndGainedTable = ({
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'add')
                   }
-                  disabled={caratsGained >= 100}
+                  disabled={caratsGained >= maxCaratsGained}
                 >
                   <PlusIcon className="h-4 w-4" />
                 </Button>
@@ -185,7 +190,7 @@ export const CaratsUsedAndGainedTable = ({
             <th className="outline p-1">{caratsUsed}</th>
             <th className="outline p-1">
               {caratsGained}
-              {caratsGained >= 100 ? ' (max)' : null}
+              {caratsGained >= maxCaratsGained ? ' (max)' : null}
             </th>
             <th className="outline p-1"></th>
           </tr>

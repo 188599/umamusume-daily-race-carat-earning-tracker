@@ -1,7 +1,7 @@
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { Button } from 'flowbite-react';
+import { Button, Checkbox, Label } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import ModalConfirmAction from './ModalConfirmAction';
@@ -33,6 +33,7 @@ function App() {
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
+  const [doubleRaceRewards, setDoubleRaceRewards] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const startOfDay = dayjs().startOf('day').add(12, 'h');
@@ -158,6 +159,7 @@ function App() {
             setTableData,
             setCurrentCareerFinishingTime,
             setCurrentCareerTimeLeft,
+            doubleRaceRewards,
             intervalRef,
           }}
         />
@@ -175,6 +177,15 @@ function App() {
           {formattedCareerRemainingTime ?
             <h3>Run timer: {formattedCareerRemainingTime} </h3>
           : null}
+        </div>
+
+        <div className="gap-2 flex">
+          <Checkbox
+            id="double-race-rewards"
+            checked={doubleRaceRewards}
+            onChange={() => setDoubleRaceRewards(!doubleRaceRewards)}
+          />
+          <Label htmlFor="double-race-rewards">Double race rewards</Label>
         </div>
       </div>
 
