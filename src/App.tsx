@@ -4,27 +4,23 @@ import duration from 'dayjs/plugin/duration';
 import { Button, Checkbox, Label } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import ModalConfirmAction from './ModalConfirmAction';
 import { CaratsUsedAndGainedTable } from './CaratsUsedAndGainedTable';
+import ModalConfirmAction from './ModalConfirmAction';
 import { NetGains } from './NetGains';
+import type { TableData } from './models/tableData';
 
 dayjs.extend(duration);
 
-interface TabledData {
-  usedCarats: boolean;
-  gainedCarats: number | null;
-}
-
 interface StoredData {
   date?: Dayjs;
-  tableData?: TabledData[];
+  tableData?: TableData[];
   currentCareerFinishingTime?: Dayjs;
   previousDays?: number;
   numberOfPreviousDays?: number;
 }
 
 function App() {
-  const [tableData, setTableData] = useState<TabledData[]>([]);
+  const [tableData, setTableData] = useState<TableData[]>([]);
   const [currentCareerFinishingTime, setCurrentCareerFinishingTime] =
     useState<Dayjs | null>(null);
   const [currentCareerTimeLeft, setCurrentCareerTimeLeft] = useState<
@@ -58,7 +54,7 @@ function App() {
   const handleTableDataAddItem = () => {
     setTableData((tableData) => [
       ...tableData,
-      { usedCarats: false, gainedCarats: null },
+      { usedCarats: false, gainedCarats: null, doubleRaceRewards },
     ]);
 
     setCurrentCareerFinishingTime(dayjs().add(50, 'minutes'));
@@ -67,7 +63,12 @@ function App() {
 
   useEffect(() => {
     if (storedData.date != null) {
-      setTableData(storedData.tableData!);
+      setTableData(
+        storedData.tableData!.map((data) => ({
+          ...data,
+          doubleRaceRewards: data.doubleRaceRewards ?? false,
+        })),
+      );
       setCurrentCareerFinishingTime(
         storedData.currentCareerFinishingTime ?
           dayjs(storedData.currentCareerFinishingTime)

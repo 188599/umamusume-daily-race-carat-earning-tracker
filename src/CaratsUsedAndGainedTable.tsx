@@ -9,11 +9,7 @@ import type { Dayjs } from 'dayjs';
 import { Button } from 'flowbite-react';
 import { useState } from 'react';
 import ModalConfirmAction from './ModalConfirmAction';
-
-interface TabledData {
-  usedCarats: boolean;
-  gainedCarats: number | null;
-}
+import type { TableData } from './models/tableData';
 
 export const CaratsUsedAndGainedTable = ({
   tableData,
@@ -23,8 +19,8 @@ export const CaratsUsedAndGainedTable = ({
   doubleRaceRewards,
   intervalRef,
 }: {
-  tableData: TabledData[];
-  setTableData: React.Dispatch<React.SetStateAction<TabledData[]>>;
+  tableData: TableData[];
+  setTableData: React.Dispatch<React.SetStateAction<TableData[]>>;
   setCurrentCareerFinishingTime: React.Dispatch<
     React.SetStateAction<Dayjs | null>
   >;
@@ -35,8 +31,23 @@ export const CaratsUsedAndGainedTable = ({
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteModalAction, setDeleteModalAction] = useState(() => () => {});
 
+  const calcMaxCarats = () => {
+    const timesEarned = tableData
+      .filter((d) => d.gainedCarats != null && d.gainedCarats > 0)
+      .reduce(
+        (p, c) => p + c.gainedCarats! / (c.doubleRaceRewards ? 10 : 5),
+        0,
+      );
+    const amountEarned = tableData.reduce(
+      (p, c) => p + (c.gainedCarats ?? 0),
+      0,
+    );
+
+    return (20 - timesEarned) * (doubleRaceRewards ? 10 : 5) + amountEarned;
+  };
+
   const caratsPerReward = doubleRaceRewards ? 10 : 5;
-  const maxCaratsGained = doubleRaceRewards ? 200 : 100;
+  const maxCaratsGained = calcMaxCarats();
 
   const caratsUsed = tableData.filter((d) => d.usedCarats).length * 10;
   const caratsGained = tableData
@@ -110,6 +121,7 @@ export const CaratsUsedAndGainedTable = ({
       handleTableDataDeleteItem(index);
     });
     setDeleteModalOpen(true);
+    ('');
   };
 
   return (
@@ -130,7 +142,7 @@ export const CaratsUsedAndGainedTable = ({
                   size="xs"
                   outline
                   pill
-                  title='Toggle carats used'
+                  title="Toggle carats used"
                   color={data.usedCarats ? 'green' : 'red'}
                   onClick={() =>
                     handleChangeUsedCaratsTableDataItem(i, !data.usedCarats)
@@ -147,7 +159,7 @@ export const CaratsUsedAndGainedTable = ({
                   color="blue"
                   size="xs"
                   outline
-                  title='Decrease carats gained'
+                  title="Decrease carats gained"
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'subtract')
                   }
@@ -160,7 +172,7 @@ export const CaratsUsedAndGainedTable = ({
                   pill
                   color="blue"
                   outline
-                  title='Add carats gained'
+                  title="Add carats gained"
                   onClick={() =>
                     handleChangeGainedCaratsTableDataItem(i, 'add')
                   }
@@ -175,7 +187,7 @@ export const CaratsUsedAndGainedTable = ({
                   outline
                   size="xs"
                   color="red"
-                  title='Delete entry'
+                  title="Delete entry"
                   onClick={() => handleDelete(i)}
                 >
                   <TrashIcon className="h-4 w-4" />
