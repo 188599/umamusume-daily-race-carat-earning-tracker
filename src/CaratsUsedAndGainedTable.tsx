@@ -1,10 +1,4 @@
-import {
-  CheckIcon,
-  MinusIcon,
-  PlusIcon,
-  TrashIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type { Dayjs } from 'dayjs';
 import { Button } from 'flowbite-react';
 import { useState } from 'react';
@@ -49,7 +43,9 @@ export const CaratsUsedAndGainedTable = ({
   const caratsPerReward = doubleRaceRewards ? 10 : 5;
   const maxCaratsGained = calcMaxCarats();
 
-  const caratsUsed = tableData.filter((d) => d.usedCarats).length * 10;
+  const caratsUsed = tableData
+    .filter((d) => d.usedCarats)
+    .reduce((p, c) => p + c.usedCarats * 10, 0);
   const caratsGained = tableData
     .filter((d) => d.gainedCarats != null)
     .map((d) => d.gainedCarats!)
@@ -69,14 +65,23 @@ export const CaratsUsedAndGainedTable = ({
     });
   };
 
-  const handleChangeUsedCaratsTableDataItem = (
-    index: number,
-    usedCarats: boolean,
-  ) => {
+  const handleChangeUsedCaratsTableDataItem = (index: number) => {
     setTableData((tableData) => {
       const newTableData = [...tableData];
       const currentItemValue = newTableData[index];
-      newTableData.splice(index, 1, { ...currentItemValue, usedCarats });
+
+      let usedCarats = currentItemValue.usedCarats;
+
+      if (usedCarats != 2) {
+        usedCarats += 1;
+      } else {
+        usedCarats = 0;
+      }
+
+      newTableData.splice(index, 1, {
+        ...currentItemValue,
+        usedCarats: usedCarats as TableData['usedCarats'],
+      });
 
       return newTableData;
     });
@@ -142,15 +147,14 @@ export const CaratsUsedAndGainedTable = ({
                   size="xs"
                   outline
                   pill
-                  title="Toggle carats used"
-                  color={data.usedCarats ? 'green' : 'red'}
-                  onClick={() =>
-                    handleChangeUsedCaratsTableDataItem(i, !data.usedCarats)
+                  title={
+                    'Toggle carats used\n0x - No carats\n1x - Run or reroll\n2x - Run and reroll'
                   }
+                  color="blue"
+                  className="px-3.5"
+                  onClick={() => handleChangeUsedCaratsTableDataItem(i)}
                 >
-                  {data.usedCarats ?
-                    <CheckIcon className="h-4 w-4" />
-                  : <XMarkIcon className="h-4 w-4" />}
+                  {data.usedCarats}x
                 </Button>
               </th>
               <th className="outline p-2 justify-items-center flex gap-2">

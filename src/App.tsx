@@ -54,7 +54,7 @@ function App() {
   const handleTableDataAddItem = () => {
     setTableData((tableData) => [
       ...tableData,
-      { usedCarats: false, gainedCarats: null, doubleRaceRewards },
+      { usedCarats: 0, gainedCarats: null, doubleRaceRewards },
     ]);
 
     setCurrentCareerFinishingTime(dayjs().add(50, 'minutes'));
