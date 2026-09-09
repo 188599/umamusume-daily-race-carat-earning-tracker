@@ -7,6 +7,8 @@ import type { TableData } from './models/tableData';
 
 export const CaratsUsedAndGainedTable = ({
   tableData,
+  caratsUsed,
+  caratsGained,
   setTableData,
   setCurrentCareerFinishingTime,
   setCurrentCareerTimeLeft,
@@ -14,6 +16,8 @@ export const CaratsUsedAndGainedTable = ({
   intervalRef,
 }: {
   tableData: TableData[];
+  caratsUsed: number;
+  caratsGained: number;
   setTableData: React.Dispatch<React.SetStateAction<TableData[]>>;
   setCurrentCareerFinishingTime: React.Dispatch<
     React.SetStateAction<Dayjs | null>
@@ -42,14 +46,6 @@ export const CaratsUsedAndGainedTable = ({
 
   const caratsPerReward = doubleRaceRewards ? 10 : 5;
   const maxCaratsGained = calcMaxCarats();
-
-  const caratsUsed = tableData
-    .filter((d) => d.usedCarats)
-    .reduce((p, c) => p + c.usedCarats * 10, 0);
-  const caratsGained = tableData
-    .filter((d) => d.gainedCarats != null)
-    .map((d) => d.gainedCarats!)
-    .reduce((acc, cur) => acc + cur, 0);
 
   const handleTableDataDeleteItem = (index: number) => {
     if (index == tableData.length - 1) {

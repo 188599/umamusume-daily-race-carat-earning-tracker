@@ -43,7 +43,9 @@ function App() {
   const cumulativeNet = storedData.previousDays;
   const numberOfPreviousDays = storedData.numberOfPreviousDays;
 
-  const caratsUsed = tableData.filter((d) => d.usedCarats).length * 10;
+  const caratsUsed = tableData
+    .filter((d) => d.usedCarats)
+    .reduce((p, c) => p + c.usedCarats * 10, 0);
   const caratsGained = tableData
     .filter((d) => d.gainedCarats != null)
     .map((d) => d.gainedCarats!)
@@ -157,6 +159,8 @@ function App() {
         <CaratsUsedAndGainedTable
           {...{
             tableData,
+            caratsUsed,
+            caratsGained,
             setTableData,
             setCurrentCareerFinishingTime,
             setCurrentCareerTimeLeft,
