@@ -15,6 +15,9 @@ import { LocalStorageService } from './localStorageService';
 dayjs.extend(duration);
 
 function App() {
+  const localStorageService = new LocalStorageService();
+  const storedData = localStorageService.getData();
+
   const [tableData, setTableData] = useState<TableData[]>([]);
   const [currentCareerFinishingTime, setCurrentCareerFinishingTime] =
     useState<Dayjs | null>(null);
@@ -24,9 +27,11 @@ function App() {
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
-  const [doubleRaceRewards, setDoubleRaceRewards] = useState(false);
+  const [doubleRaceRewards, setDoubleRaceRewards] = useState(
+    storedData.doubleRaceRewards ?? false,
+  );
   const [playAudioWhenCareerFinishes, setPlayAudioWhenCareerFinishes] =
-    useState(false);
+    useState(storedData.playAudioWhenCareerFinishes ?? false);
   const [careerFinishAudio] = useState(new Audio(golshiAlertAudio));
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -34,20 +39,8 @@ function App() {
   const date =
     startOfDay.isBefore(dayjs()) ? startOfDay : startOfDay.add(-1, 'day');
 
-  const localStorageService = new LocalStorageService();
-
-  const storedData = localStorageService.getData();
-
   const cumulativeNet = storedData.previousDays;
   const numberOfPreviousDays = storedData.numberOfPreviousDays;
-
-  if (storedData.doubleRaceRewards != null) {
-    setDoubleRaceRewards(storedData.doubleRaceRewards);
-  }
-
-  if (storedData.playAudioWhenCareerFinishes != null) {
-    setPlayAudioWhenCareerFinishes(storedData.playAudioWhenCareerFinishes);
-  }
 
   const caratsUsed = tableData
     .filter((d) => d.usedCarats)
