@@ -119,9 +119,18 @@ function App() {
         currentCareerFinishingTime,
         previousDays: cumulativeNet,
         numberOfPreviousDays,
+        doubleRaceRewards,
+        playAudioWhenCareerFinishes,
       });
     }
-  }, [date, tableData, currentCareerFinishingTime, currentCareerTimeLeft]);
+  }, [
+    date,
+    tableData,
+    currentCareerFinishingTime,
+    currentCareerTimeLeft,
+    doubleRaceRewards,
+    playAudioWhenCareerFinishes,
+  ]);
 
   const formattedCareerRemainingTime =
     currentCareerTimeLeft ?
@@ -149,6 +158,8 @@ function App() {
       localStorageService.saveData({
         previousDays,
         numberOfPreviousDays,
+        doubleRaceRewards,
+        playAudioWhenCareerFinishes,
       });
 
       setOpenModal(false);
