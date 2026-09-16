@@ -10,16 +10,9 @@ import { NetGains } from './NetGains';
 import type { TableData } from './models/tableData';
 
 import golshiAlertAudio from './assets/red-alert-goldship.mp3';
+import { LocalStorageService } from './localStorageService';
 
 dayjs.extend(duration);
-
-interface StoredData {
-  date?: Dayjs;
-  tableData?: TableData[];
-  currentCareerFinishingTime?: Dayjs;
-  previousDays?: number;
-  numberOfPreviousDays?: number;
-}
 
 function App() {
   const [tableData, setTableData] = useState<TableData[]>([]);
@@ -41,9 +34,9 @@ function App() {
   const date =
     startOfDay.isBefore(dayjs()) ? startOfDay : startOfDay.add(-1, 'day');
 
-  const storedData: StoredData = JSON.parse(
-    window.localStorage.getItem('storedData') ?? '{}',
-  );
+  const localStorageService = new LocalStorageService();
+
+  const storedData = localStorageService.getData();
 
   const cumulativeNet = storedData.previousDays;
   const numberOfPreviousDays = storedData.numberOfPreviousDays;
@@ -112,16 +105,13 @@ function App() {
 
   useEffect(() => {
     if (tableData || currentCareerFinishingTime || currentCareerTimeLeft) {
-      window.localStorage.setItem(
-        'storedData',
-        JSON.stringify({
-          date,
-          tableData,
-          currentCareerFinishingTime,
-          previousDays: cumulativeNet,
-          numberOfPreviousDays,
-        } as StoredData),
-      );
+      localStorageService.saveData({
+        date,
+        tableData,
+        currentCareerFinishingTime,
+        previousDays: cumulativeNet,
+        numberOfPreviousDays,
+      });
     }
   }, [date, tableData, currentCareerFinishingTime, currentCareerTimeLeft]);
 
@@ -135,9 +125,8 @@ function App() {
       'Are you sure you want to start a new day? This will delete the current entries and add the current net results to prior days.',
     );
     setModalAction(() => () => {
-      let { previousDays, numberOfPreviousDays }: StoredData = JSON.parse(
-        window.localStorage.getItem('storedData') ?? '{}',
-      );
+      let { previousDays, numberOfPreviousDays } =
+        localStorageService.getData();
 
       previousDays ??= 0;
       numberOfPreviousDays ??= 0;
@@ -149,13 +138,10 @@ function App() {
       setCurrentCareerTimeLeft(null);
       setTableData([]);
 
-      window.localStorage.setItem(
-        'storedData',
-        JSON.stringify({
-          previousDays,
-          numberOfPreviousDays,
-        } as StoredData),
-      );
+      localStorageService.saveData({
+        previousDays,
+        numberOfPreviousDays,
+      });
 
       setOpenModal(false);
     });
