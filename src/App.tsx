@@ -9,6 +9,8 @@ import ModalConfirmAction from './ModalConfirmAction';
 import { NetGains } from './NetGains';
 import type { TableData } from './models/tableData';
 
+import golshiAlertAudio from './assets/red-alert-goldship.mp3';
+
 dayjs.extend(duration);
 
 interface StoredData {
@@ -30,6 +32,9 @@ function App() {
   const [modalText, setModalText] = useState('');
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
   const [doubleRaceRewards, setDoubleRaceRewards] = useState(false);
+  const [playAudioWhenCareerFinishes, setPlayAudioWhenCareerFinishes] =
+    useState(false);
+  const [careerFinishAudio] = useState(new Audio(golshiAlertAudio));
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const startOfDay = dayjs().startOf('day').add(12, 'h');
@@ -92,6 +97,10 @@ function App() {
         if (diff <= 0) {
           clearInterval(intervalRef.current!);
           setCurrentCareerTimeLeft(0);
+
+          if (playAudioWhenCareerFinishes) {
+            careerFinishAudio.play();
+          }
         } else {
           setCurrentCareerTimeLeft(diff);
         }
@@ -184,13 +193,28 @@ function App() {
           : null}
         </div>
 
-        <div className="gap-2 flex">
-          <Checkbox
-            id="double-race-rewards"
-            checked={doubleRaceRewards}
-            onChange={() => setDoubleRaceRewards(!doubleRaceRewards)}
-          />
-          <Label htmlFor="double-race-rewards">Double race rewards</Label>
+        <div className="flex flex-col">
+          <div className="gap-2 flex">
+            <Checkbox
+              id="play-audio-when-career-finishes"
+              checked={playAudioWhenCareerFinishes}
+              onChange={() =>
+                setPlayAudioWhenCareerFinishes(!playAudioWhenCareerFinishes)
+              }
+            />
+            <Label htmlFor="play-audio-when-career-finishes">
+              Play audio when career finishes
+            </Label>
+          </div>
+
+          <div className="gap-2 flex">
+            <Checkbox
+              id="double-race-rewards"
+              checked={doubleRaceRewards}
+              onChange={() => setDoubleRaceRewards(!doubleRaceRewards)}
+            />
+            <Label htmlFor="double-race-rewards">Double race rewards</Label>
+          </div>
         </div>
       </div>
 
