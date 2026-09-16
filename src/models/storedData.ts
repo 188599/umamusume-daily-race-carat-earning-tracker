@@ -7,4 +7,6 @@ export interface StoredData {
   currentCareerFinishingTime?: Dayjs | null;
   previousDays?: number;
   numberOfPreviousDays?: number;
+  doubleRaceRewards?: boolean;
+  playAudioWhenCareerFinishes?: boolean;
 }

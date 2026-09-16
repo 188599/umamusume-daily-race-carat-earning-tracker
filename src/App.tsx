@@ -41,6 +41,14 @@ function App() {
   const cumulativeNet = storedData.previousDays;
   const numberOfPreviousDays = storedData.numberOfPreviousDays;
 
+  if (storedData.doubleRaceRewards != null) {
+    setDoubleRaceRewards(storedData.doubleRaceRewards);
+  }
+
+  if (storedData.playAudioWhenCareerFinishes != null) {
+    setPlayAudioWhenCareerFinishes(storedData.playAudioWhenCareerFinishes);
+  }
+
   const caratsUsed = tableData
     .filter((d) => d.usedCarats)
     .reduce((p, c) => p + c.usedCarats * 10, 0);
